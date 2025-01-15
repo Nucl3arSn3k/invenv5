@@ -1,0 +1,26 @@
+{
+    "name": "Nim-Mint-Crystal-COBOL Dev Environment",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "dev",
+    "workspaceFolder": "/app",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "nimsaem.nimvscode",
+                "crystal-lang-tools.crystal-lang",
+                "bitlang.cobol",
+                "ms-azuretools.vscode-docker"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "files.watcherExclude": {
+                    "**/target": true,
+                    "**/.nim/": true
+                }
+            }
+        }
+    },
+    "forwardPorts": [3000],
+    "postCreateCommand": "nim --version && crystal --version && mint --version && cobc --version",
+    "remoteUser": "root"
+}

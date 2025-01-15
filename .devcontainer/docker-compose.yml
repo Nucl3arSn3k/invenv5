@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  dev:
+    container_name: hardcore_goldwasser
+    build: 
+      context: .
+      dockerfile: dockerfile
+    volumes:
+      - .:/app
+      - nim-cache:/root/.nimble
+      - crystal-cache:/root/.cache/crystal
+    ports:
+      - "3000:3000"
+    command: sleep infinity
+    working_dir: /app
+
+volumes:
+  nim-cache:
+  crystal-cache:
