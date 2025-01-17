@@ -1,0 +1,16 @@
+name: myapp
+version: 0.1.0
+
+authors:
+  - Your Name <your@email.com>
+
+targets:
+  myapp:
+    main: src/myapp.cr
+
+crystal: '>= 1.0.0'
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal
+
