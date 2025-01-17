@@ -19,4 +19,4 @@ jobs:
     - name: Install dependencies
       run: shards install
     - name: Check compilation
-      run: crystal build --no-codegen src/your_app.cr
+      run: crystal build --no-codegen src/invenv6.cr
