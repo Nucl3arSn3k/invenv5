@@ -1,12 +1,12 @@
-name: myapp
+name: invenv5
 version: 0.1.0
 
 authors:
   - Your Name <your@email.com>
 
 targets:
-  myapp:
-    main: src/myapp.cr
+  invenv5:
+    main: src/invenv5.cr
 
 crystal: '>= 1.0.0'
 
