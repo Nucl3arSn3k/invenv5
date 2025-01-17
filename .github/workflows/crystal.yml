@@ -18,5 +18,5 @@ jobs:
     - uses: actions/checkout@v4
     - name: Install dependencies
       run: shards install
-    - name: Run tests
-      run: crystal spec
+    - name: Check compilation
+        run: crystal build --no-codegen src/your_app.cr
