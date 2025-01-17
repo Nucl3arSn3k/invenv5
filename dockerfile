@@ -33,16 +33,6 @@ RUN apt-get update && apt-get install -y \
     gnucobol \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Ur/Web
-RUN opam init -y --disable-sandboxing
-RUN opam switch create 4.13.1
-RUN eval $(opam env)
-RUN wget http://www.impredicative.com/ur/urweb-20200209.tgz
-RUN tar xzf urweb-20200209.tgz
-RUN cd urweb-20200209 && \
-    ./configure && \
-    make && \
-    make install
 
 # Install Pharo (Smalltalk implementation with Seaside)
 RUN wget -O - get.pharo.org/64/110+vm | bash
