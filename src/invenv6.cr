@@ -10,4 +10,9 @@ get "/" do |env|
   render "src/views/login.ecr"
 end
 
+
+get "/homepage" do |env|
+  render "src/views/table.ecr"
+end
+
 Kemal.run
