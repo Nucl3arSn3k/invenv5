@@ -1,7 +1,7 @@
 all: libclib.so
 
 freeipa.o: freeipa.c
-	gcc -c -fPIC freeipa.c -o freeipa.o
+	apt-get update && apt-get install -y libcurl4-openssl-dev
 
 libclib.so: freeipa.o
 	gcc -shared freeipa.o -o libclib.so

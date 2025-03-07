@@ -8,7 +8,7 @@ end
 @[Link("clib")]
 lib CLib
   # Define the function signature
-  fun loginhandle(str1 : LibC::Char*, str2 : LibC::Char*) : Void
+  fun loginhandle(str1 : LibC::Char*, str2 : LibC::Char*, url : LibC::Char*) : Void
 end
 
 
@@ -34,7 +34,8 @@ end
 post "/login" do |env| # handling post for pass
   username = env.params.body["username"].as(String)
   password = env.params.body["password"].as(String)
-  validatecreds(username, password)
+  login_url = "placeholder"
+  validatecreds(username, password, login_url)
 end
 
 get "/" do |env|

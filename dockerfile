@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y \
 
 # Install Crystal and Kemal
 RUN curl -fsSL https://crystal-lang.org/install.sh | bash
-RUN crystal init app myapp
+RUN install shards
 
 
 # Install COBOL
@@ -35,13 +35,8 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 
-# Install Pharo (Smalltalk implementation with Seaside)
-RUN wget -O - get.pharo.org/64/110+vm | bash
-RUN ./pharo Pharo.image eval --save "Metacello new \
-    baseline: 'Seaside3'; \
-    repository: 'github://SeasideSt/Seaside:master/repository'; \
-    load"
-
+#try installing libcurl again because it didn't work initally
+RUN apt-get update && apt-get install -y libcurl4-openssl-dev
 # Set up working directory
 WORKDIR /app
 
