@@ -1,14 +1,15 @@
 # invenv6
 
-TODO: Write a description here
+Inventory controll
 
 ## Installation
 
 TODO: Write installation instructions here
 
 ## Usage
-
-TODO: Write usage instructions here
+install kemal
+run makefile
+run crystal build --release src/invenv6.cr --link-flags="-L/app -Wl,-rpath,/app" to compile with linked C functionality.
 
 ## Development
 

@@ -20,13 +20,14 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     libssl-dev \
     libgmp-dev \
+    libcurl4-openssl-dev \
     unzip \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Crystal and Kemal
 RUN curl -fsSL https://crystal-lang.org/install.sh | bash
 RUN crystal init app myapp
-RUN cd myapp && echo 'dependencies:\n  kemal:\n    github: kemalcr/kemal' > shard.yml && shards install
+
 
 # Install COBOL
 RUN apt-get update && apt-get install -y \
