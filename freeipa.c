@@ -3,8 +3,11 @@
 #include <string.h>
 
 
-int loginhandle(const char* username,const char* password){
+void loginhandle(const char* username,const char* password){
+    //FILE* logfile = fopen("login_out.log","a");
+    printf("Username:%s \n",username);
+    printf("Password:%s \n",password);
 
-    printf("Username:%s",username);
-    printf("Password:%s",password);
+
+    
 }
