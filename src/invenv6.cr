@@ -28,8 +28,8 @@ Kemal.config.add_handler(CustomAuthHandler.new("admin", "password"))
 serve_static({"gzip" => false})
 # login_url = "https://citadel.cif.rochester.edu/ipa/session/login_password"
 
-private def validatecreds(username, pass) # handles yapping to the FREEIPA server
-  CLib.loginhandle(username.to_unsafe,pass.to_unsafe)
+private def validatecreds(username, pass, login_url) # handles yapping to the FREEIPA server
+  CLib.loginhandle(username.to_unsafe,pass.to_unsafe,login_url.to_unsafe)
 end
 post "/login" do |env| # handling post for pass
   username = env.params.body["username"].as(String)
