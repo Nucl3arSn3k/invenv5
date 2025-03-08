@@ -34,7 +34,7 @@ end
 post "/login" do |env| # handling post for pass
   username = env.params.body["username"].as(String)
   password = env.params.body["password"].as(String)
-  login_url = "placeholder"
+  login_url = "https://ipa.demo1.freeipa.org/ipa/session/login_password"
   validatecreds(username, password, login_url)
 end
 
