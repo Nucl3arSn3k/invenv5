@@ -42,6 +42,7 @@ void loginhandle(const char *username, const char *password, const char *url)
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, char_array_fin); // Set fields
         char errbuf[CURL_ERROR_SIZE];
         curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);
+        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
         ret = curl_easy_perform(curl); // preform request
         if (ret != CURLE_OK)
         {
