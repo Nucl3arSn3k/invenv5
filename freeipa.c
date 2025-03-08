@@ -4,12 +4,12 @@
 #include <string.h>
 #include <curl/curl.h>
 #include <math.h>
-void loginhandle(const char *username, const char *password, const char *url)
+long loginhandle(const char *username, const char *password, const char *url)
 {
 
     printf("Username:%s \n", username);
     printf("Password:%s \n", password);
-
+    long http_code = 0;
     CURL *curl = curl_easy_init();
     CURLcode ret;
     if (curl)
@@ -44,16 +44,24 @@ void loginhandle(const char *username, const char *password, const char *url)
         curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);
         curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
         ret = curl_easy_perform(curl); // preform request
+        printf("CURL return code: %d\n", ret);
+        
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+        printf("HTTP Status code is: %ld \n",http_code);
         if (ret != CURLE_OK)
         {
             fprintf(stderr, "CURL error %s\n", errbuf);
         }
         else
         {
-            fprintf(stderr, "CURL error: %s\n", curl_easy_strerror(res));
+            fprintf(stderr, "CURL error: %s\n", curl_easy_strerror(ret));
         }
+
+
         // printf()
         curl_easy_cleanup(curl); // Need json lib to handle return
     }
     curl_global_cleanup();
+
+    return http_code;
 }
