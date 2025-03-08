@@ -9,7 +9,9 @@ TODO: Write installation instructions here
 ## Usage
 install kemal
 run `shards install`
+
 run `makefile`
+
 `run crystal build --release src/invenv6.cr --link-flags="-L/app -Wl,-rpath,/app"` to compile with linked C functionality.
 
 ## Development
