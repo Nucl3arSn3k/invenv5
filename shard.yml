@@ -11,3 +11,5 @@ dependencies:
     github: kemalcr/kemal
   kemal-basic-auth:
     github: kemalcr/kemal-basic-auth
+  kemal-session:
+    github: kemalcr/kemal-session
