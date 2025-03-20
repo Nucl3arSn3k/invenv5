@@ -16,27 +16,41 @@ RUN apt-get update && apt-get install -y \
     gcc \
     ocaml \
     opam \
+    dune \
     m4 \
     pkg-config \
     libssl-dev \
     libgmp-dev \
     libcurl4-openssl-dev \
     unzip \
+    gdb \
+    bubblewrap \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Crystal and Kemal
 RUN curl -fsSL https://crystal-lang.org/install.sh | bash
 RUN install shards
 
-
 # Install COBOL
 RUN apt-get update && apt-get install -y \
     gnucobol \
     && rm -rf /var/lib/apt/lists/*
 
+# Initialize OPAM and install OCaml development tools
+RUN opam init --disable-sandboxing --no-setup --yes && \
+    opam switch create 4.14.1 && \
+    eval $(opam env) && \
+    opam install -y \
+    ocaml-lsp-server \
+    ocamlformat \
+    utop \
+    merlin \
+    odoc \
+    ocp-indent
 
-#try installing libcurl again because it didn't work initally
-RUN apt-get update && apt-get install -y libcurl4-openssl-dev
+# Add OPAM environment to PATH and make it available in all shells
+RUN echo 'eval $(opam env)' >> ~/.bashrc
+
 # Set up working directory
 WORKDIR /app
 
