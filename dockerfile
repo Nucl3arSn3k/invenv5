@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y \
 
 # Install Crystal and Kemal
 RUN curl -fsSL https://crystal-lang.org/install.sh | bash
-RUN install shards
+
 
 # Install COBOL
 RUN apt-get update && apt-get install -y \
