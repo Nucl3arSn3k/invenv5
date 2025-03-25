@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     nodejs \
     npm \
     wget \
+	dos2unix \
     xz-utils \
     gcc \
     ocaml \
@@ -47,6 +48,8 @@ RUN choosenim stable && \
     choosenim devel
 # Set up working directory
 WORKDIR /app
-
+# Create an entrypoint wrapper script
+RUN echo '#!/bin/bash\ndos2unix /app/entrypoint.sh\nchmod +x /app/entrypoint.sh\nexec /app/entrypoint.sh "$@"' > /entrypoint-wrapper.sh && \
+    chmod +x /entrypoint-wrapper.sh
 # Default command
 CMD ["/bin/bash"]

@@ -10,7 +10,7 @@ services:
       - crystal-cache:/root/.cache/crystal
     ports:
       - "3000:3000"
-    entrypoint: /app/entrypoint.sh
+    entrypoint: /entrypoint-wrapper.sh
     command: sleep infinity
     working_dir: /app
 volumes:
