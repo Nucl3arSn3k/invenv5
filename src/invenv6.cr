@@ -8,9 +8,9 @@ module Invenv6
   VERSION = "0.1.0"
 end
 
-@[Link("clib")]
+# Keep this minimal - just declare the library name
+@[Link("loginhandle")]
 lib CLib
-  # Function sig for C
   fun loginhandle(str1 : LibC::Char*, str2 : LibC::Char*, url : LibC::Char*) : LibC::Long
 end
 

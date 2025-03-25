@@ -36,21 +36,15 @@ RUN apt-get update && apt-get install -y \
     gnucobol \
     && rm -rf /var/lib/apt/lists/*
 
-# Initialize OPAM and install OCaml development tools
-RUN opam init --disable-sandboxing --no-setup --yes && \
-    opam switch create 4.14.1 && \
-    eval $(opam env) && \
-    opam install -y \
-    ocaml-lsp-server \
-    ocamlformat \
-    utop \
-    merlin \
-    odoc \
-    ocp-indent
+# Install latest Nim with choosenim
+RUN curl https://nim-lang.org/choosenim/init.sh -sSf | sh -s -- -y --latest
+ENV PATH=/root/.nimble/bin:$PATH
 
-# Add OPAM environment to PATH and make it available in all shells
-RUN echo 'eval $(opam env)' >> ~/.bashrc
 
+# Install Nim development tools
+RUN choosenim stable && \
+    nimble install nimlsp -y && \
+    choosenim devel
 # Set up working directory
 WORKDIR /app
 
