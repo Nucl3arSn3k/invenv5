@@ -15,9 +15,7 @@ RUN apt-get update && apt-get install -y \
 	dos2unix \
     xz-utils \
     gcc \
-    ocaml \
-    opam \
-    dune \
+    gfortran \
     m4 \
     pkg-config \
     libssl-dev \
@@ -32,10 +30,7 @@ RUN apt-get update && apt-get install -y \
 RUN curl -fsSL https://crystal-lang.org/install.sh | bash
 
 
-# Install COBOL
-RUN apt-get update && apt-get install -y \
-    gnucobol \
-    && rm -rf /var/lib/apt/lists/*
+
 
 # Install latest Nim with choosenim
 RUN curl https://nim-lang.org/choosenim/init.sh -sSf | sh -s -- -y --latest

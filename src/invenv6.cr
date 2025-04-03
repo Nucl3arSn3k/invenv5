@@ -66,7 +66,7 @@ post "/login" do |env|
   username = env.params.body["username"].as(String)
   password = env.params.body["password"].as(String)
  
-  login_url = "https://ipa.demo1.freeipa.org/ipa/session/login_password"
+  login_url = "https://ipa.demo1.freeipa.org/ipa/session/login_password" #tweak to CIF IPA server URL
   result = validatecreds(username, password, login_url)
  
   if result == 200

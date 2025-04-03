@@ -3,10 +3,6 @@
 Inventory controll
 
 ## Installation
-
-TODO: Write installation instructions here
-
-## Usage
 install kemal
 run `shards install`
 
@@ -15,6 +11,9 @@ run `make`
 run `nim c --cc:gcc --app:lib --noMain --header --out:libloginhandle.so --passL:"-lcurl" login_codegen.nim`
 
 run `crystal build --release src/invenv6.cr   --link-flags="-L/app/src/codegen -Wl,-rpath,/app/src/codegen"` to compile with linked C functionality.
+
+## Usage
+Just use the webapp. You'll defintely need to point the URL at the CIF server though.
 
 ## Development
 
