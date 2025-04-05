@@ -1,5 +1,4 @@
 <h1>Inventory Items</h1>
-
 <table>
   <thead>
     <tr>
@@ -9,9 +8,71 @@
       <th>Checked Out By</th>
       <th>Check Out Time</th>
       <th>Return Time</th>
-      <th>Image</th> <!-- New column for image -->
+      <th>Image</th>
     </tr>
   </thead>
   <tbody>
+    <% items = env.get("items").as(Array(NamedTuple(id: Int64, item_name: String, item_desc: String, checked_out: Bool, checked_out_by: String?, check_out_time: Time?, return_time: Time?, image: String, content_type: String))) %>
+    <% items.each do |item| %>
+      <tr>
+        <td><%= item[:item_name] %></td>
+        <td><%= item[:item_desc] %></td>
+        <td><%= item[:checked_out] ? "Yes" : "No" %></td>
+        <td><%= item[:checked_out_by] || "-" %></td>
+        <td><%= item[:check_out_time] ? item[:check_out_time].to_s("%Y-%m-%d %H:%M") : "-" %></td>
+        <td><%= item[:return_time] ? item[:return_time].to_s("%Y-%m-%d %H:%M") : "-" %></td>
+        <td>
+          <% if item[:image] %>
+            <img src="<%= item[:image] %>" alt="<%= item[:item_name] %>" style="max-width: 100px; max-height: 100px;">
+          <% else %>
+            No image
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+    <% if items.empty? %>
+      <tr>
+        <td colspan="7" style="text-align: center;">No items found</td>
+      </tr>
+    <% end %>
   </tbody>
 </table>
+
+<div style="margin-top: 20px;">
+  <a href="/add-item" class="button">Add New Item</a>
+</div>
+
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .button {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+  }
+  
+  .button:hover {
+    background-color: #45a049;
+  }
+</style>

@@ -90,9 +90,78 @@ end
 
 # Protected routes
 get "/homepage" do |env|
-  # Access the session if needed
-  user_session = env.session.object("user_session").as(SessionHandlers::UserSession)
-  username = user_session.username
+  # Access the session if needed (if you're bypassing auth, you may need to handle this differently)
+  username = begin
+    user_session = env.session.object?("user_session").as(SessionHandlers::UserSession?)
+    user_session ? user_session.username : "dev_user"
+  rescue
+    "dev_user"
+  end
+  
+  # Initialize SQLite database and create table if it doesn't exist
+  DB.open "sqlite3://./items.db" do |db|
+    # Check if table exists
+    table_exists = db.scalar("SELECT name FROM sqlite_master WHERE type='table' AND name='inventory_items'").is_a?(String)
+    
+    unless table_exists
+      # Create the inventory_items table based on the Ecto schema
+      db.exec <<-SQL
+        CREATE TABLE inventory_items (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          item_name TEXT NOT NULL,
+          item_desc TEXT NOT NULL,
+          checked_out BOOLEAN DEFAULT FALSE,
+          checked_out_by TEXT,
+          check_out_time TIMESTAMP,
+          return_time TIMESTAMP,
+          image TEXT NOT NULL,
+          content_type TEXT NOT NULL,
+          inserted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        )
+      SQL
+      
+      # Insert some sample data if needed
+      db.exec <<-SQL
+        INSERT INTO inventory_items 
+        (item_name, item_desc, image, content_type) 
+        VALUES 
+        ('Sample Item', 'This is a sample item for testing', '/images/sample.jpg', 'image/jpeg')
+      SQL
+    end
+    
+    # Query items for display in the table
+    items = [] of NamedTuple(
+      id: Int64, 
+      item_name: String, 
+      item_desc: String, 
+      checked_out: Bool, 
+      checked_out_by: String?, 
+      check_out_time: Time?, 
+      return_time: Time?, 
+      image: String, 
+      content_type: String
+    )
+    
+    db.query "SELECT id, item_name, item_desc, checked_out, checked_out_by, check_out_time, return_time, image, content_type FROM inventory_items" do |rs|
+      rs.each do
+        items << {
+          id: rs.read(Int64),
+          item_name: rs.read(String),
+          item_desc: rs.read(String),
+          checked_out: rs.read(Bool),
+          checked_out_by: rs.read(String?),
+          check_out_time: rs.read(Time?),
+          return_time: rs.read(Time?),
+          image: rs.read(String),
+          content_type: rs.read(String)
+        }
+      end
+    end
+    
+    # Make items available to the template
+    env.set "items", items
+  end
   
   render "src/views/table.ecr"
 end
