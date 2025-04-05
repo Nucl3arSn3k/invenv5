@@ -1,4 +1,7 @@
 <h1>Inventory Items</h1>
+
+<% items_data = env.get("items_data").as(String) %>
+
 <table>
   <thead>
     <tr>
@@ -11,29 +14,32 @@
       <th>Image</th>
     </tr>
   </thead>
-  <tbody>
-    <% items = env.get("items").as(Array(NamedTuple(id: Int64, item_name: String, item_desc: String, checked_out: Bool, checked_out_by: String?, check_out_time: Time?, return_time: Time?, image: String, content_type: String))) %>
-    <% items.each do |item| %>
-      <tr>
-        <td><%= item[:item_name] %></td>
-        <td><%= item[:item_desc] %></td>
-        <td><%= item[:checked_out] ? "Yes" : "No" %></td>
-        <td><%= item[:checked_out_by] || "-" %></td>
-        <td><%= item[:check_out_time] ? item[:check_out_time].to_s("%Y-%m-%d %H:%M") : "-" %></td>
-        <td><%= item[:return_time] ? item[:return_time].to_s("%Y-%m-%d %H:%M") : "-" %></td>
-        <td>
-          <% if item[:image] %>
-            <img src="<%= item[:image] %>" alt="<%= item[:item_name] %>" style="max-width: 100px; max-height: 100px;">
-          <% else %>
-            No image
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-    <% if items.empty? %>
+  <tbody id="itemsTableBody">
+    <% if items_data.empty? %>
       <tr>
         <td colspan="7" style="text-align: center;">No items found</td>
       </tr>
+    <% else %>
+      <% items_data.split("___").each do |item_str| %>
+        <% fields = item_str.split("|||") %>
+        <% if fields.size >= 9 %>
+          <tr>
+            <td><%= fields[1] %></td>
+            <td><%= fields[2] %></td>
+            <td><%= fields[3] == "true" ? "Yes" : "No" %></td>
+            <td><%= fields[4].empty? ? "-" : fields[4] %></td>
+            <td><%= fields[5].empty? ? "-" : fields[5] %></td>
+            <td><%= fields[6].empty? ? "-" : fields[6] %></td>
+            <td>
+              <% unless fields[7].empty? %>
+                <img src="<%= fields[7] %>" alt="<%= fields[1] %>" style="max-width: 100px; max-height: 100px;">
+              <% else %>
+                No image
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
     <% end %>
   </tbody>
 </table>

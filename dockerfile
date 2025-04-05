@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     libgmp-dev \
     libcurl4-openssl-dev \
+    libsqlite3-dev \
     unzip \
     gdb \
     bubblewrap \

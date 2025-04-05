@@ -3,7 +3,7 @@ require "kemal-session"
 require "http/client"
 require "json"
 require "./userobject"
-
+require "sqlite3"
 module Invenv6
   VERSION = "0.1.0"
 end
@@ -90,7 +90,7 @@ end
 
 # Protected routes
 get "/homepage" do |env|
-  # Access the session if needed (if you're bypassing auth, you may need to handle this differently)
+  # Access the session if needed
   username = begin
     user_session = env.session.object?("user_session").as(SessionHandlers::UserSession?)
     user_session ? user_session.username : "dev_user"
@@ -99,7 +99,9 @@ get "/homepage" do |env|
   end
   
   # Initialize SQLite database and create table if it doesn't exist
-  DB.open "sqlite3://./items.db" do |db|
+  items_array = [] of Array(String)
+  
+  DB.open "sqlite3://./inventory.db" do |db|
     # Check if table exists
     table_exists = db.scalar("SELECT name FROM sqlite_master WHERE type='table' AND name='inventory_items'").is_a?(String)
     
@@ -130,38 +132,27 @@ get "/homepage" do |env|
       SQL
     end
     
-    # Query items for display in the table
-    items = [] of NamedTuple(
-      id: Int64, 
-      item_name: String, 
-      item_desc: String, 
-      checked_out: Bool, 
-      checked_out_by: String?, 
-      check_out_time: Time?, 
-      return_time: Time?, 
-      image: String, 
-      content_type: String
-    )
-    
+    # Query items and collect them as simple string arrays
     db.query "SELECT id, item_name, item_desc, checked_out, checked_out_by, check_out_time, return_time, image, content_type FROM inventory_items" do |rs|
       rs.each do
-        items << {
-          id: rs.read(Int64),
-          item_name: rs.read(String),
-          item_desc: rs.read(String),
-          checked_out: rs.read(Bool),
-          checked_out_by: rs.read(String?),
-          check_out_time: rs.read(Time?),
-          return_time: rs.read(Time?),
-          image: rs.read(String),
-          content_type: rs.read(String)
-        }
+        id = rs.read(Int64).to_s
+        item_name = rs.read(String)
+        item_desc = rs.read(String)
+        checked_out = rs.read(Bool).to_s
+        checked_out_by = rs.read(String?) || ""
+        check_out_time = rs.read(String?) || ""
+        return_time = rs.read(String?) || ""
+        image = rs.read(String)
+        content_type = rs.read(String)
+        
+        items_array << [id, item_name, item_desc, checked_out, checked_out_by, check_out_time, return_time, image, content_type]
       end
     end
-    
-    # Make items available to the template
-    env.set "items", items
   end
+  
+  # Pass the stringified data to the template
+  items_data = items_array.map { |row| row.join("|||") }.join("___")
+  env.set "items_data", items_data
   
   render "src/views/table.ecr"
 end
